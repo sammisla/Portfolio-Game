@@ -8,12 +8,12 @@
 :root{--brand:#E2650F;--maroon:#8F1D2C;--ink:#231A14;--muted:#6E6159;--line:#EADBCF;--bg:#FBF5EF;--card:#fff;--good:#17714A;--goodbg:#E3F3EA}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Mulish,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-main{max-width:860px;margin:0 auto;padding:32px 16px 60px}
+main{max-width:880px;margin:0 auto;padding:32px 16px 60px}
 h1{font-size:34px;margin:0 0 4px;letter-spacing:.06em}
 h1 span{color:var(--brand)} h1 b{color:var(--maroon)}
 .lead{color:var(--muted);font-size:18px;margin:0 0 24px}
 h2{font-size:21px;margin:30px 0 10px;display:flex;align-items:center;gap:10px}
-h2 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;font-size:16px}
+h2 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;font-size:16px;flex:none}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:10px 0}
 ol,ul{margin:6px 0;padding-left:22px} li{margin:5px 0}
 code,pre{font-family:ui-monospace,Consolas,monospace;font-size:14px}
@@ -24,20 +24,25 @@ pre{background:#2A211B;color:#FCEBDD;border-radius:10px;padding:14px;overflow:au
 table{border-collapse:collapse;width:100%;font-size:15px}
 td,th{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
 th{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+td:first-child{white-space:nowrap;font-weight:700}
 .muted{color:var(--muted)}
+.fee{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0}
+.fee span{border-radius:10px;padding:6px 12px;font-weight:800;color:#fff}
 @media print{body{background:#fff}.card{break-inside:avoid}}
 </style>
 </head>
 <body><main>
 <h1><span>PORT</span><b>FOLIO</b> · Online setup</h1>
-<p class="lead">One-time setup, about 15 minutes. After this, every session is: open the link on the projector laptop, press <b>Create a game</b>, players scan the QR code.</p>
+<p class="lead">One-time setup, about 15 minutes. After this, every session is: open your link on the projector laptop, press <b>Create a game</b>, players scan the QR code.</p>
 
 <div class="card"><b>What's in this folder</b>
 <table>
 <tr><td><code>index.html</code></td><td>The game: host screen, player phones and demo</td></tr>
-<tr><td><code>config.js</code></td><td>Holds your database address (step 2)</td></tr>
-<tr><td><code>vendor/firebase-rtdb.js</code></td><td>The connection library the game uses to sync screens</td></tr>
+<tr><td><code>config.js</code></td><td>Holds your database address (step 2). Your address is already filled in.</td></tr>
+<tr><td><code>vendor/firebase-rtdb.js</code></td><td>The connection library that keeps every screen in sync</td></tr>
+<tr><td><code>vendor/fonts/</code></td><td>The game's typeface, served from your own site</td></tr>
 <tr><td><code>database.rules.json</code></td><td>Rules to paste into Firebase (step 1)</td></tr>
+<tr><td><code>.nojekyll</code></td><td>Tells GitHub Pages to publish every file exactly as uploaded</td></tr>
 </table></div>
 
 <h2><span class="n">1</span>Create the free database (Firebase)</h2>
@@ -58,7 +63,7 @@ th{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute
     }
   }
 }</pre>
-<p class="muted">These rules open only the <code>games</code> area, which holds player first names and game moves. Everything else in the database stays closed.</p>
+<p class="muted">These rules open only the <code>games</code> area, which holds player first names and game moves. The rest of the database stays closed.</p>
 </div>
 
 <h2><span class="n">2</span>Connect the game to the database</h2>
@@ -67,59 +72,80 @@ th{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--mute
 <li>Open <code>config.js</code> in Notepad and paste the address between the quotes:<br><code>window.PORTFOLIO_DB_URL = 'https://portfolio-game-default-rtdb.asia-southeast1.firebasedatabase.app';</code></li>
 <li>Save the file.</li>
 </ol>
-<p class="tip">Quick alternative: <span>leave <code>config.js</code> as it is and paste the address into the box on the host screen. The game remembers it on that laptop and adds it to the join QR code automatically. Filling in <code>config.js</code> keeps the QR code smaller and easier to scan from the back of the room.</span></p>
+<p class="tip">Your copy is ready: <span><code>config.js</code> in this folder already holds your address, so this step is complete.</span></p>
 </div>
 
-<h2><span class="n">3</span>Put the game online (Netlify, free)</h2>
+<h2><span class="n">3</span>Put the game online (GitHub Pages, free)</h2>
 <div class="card"><ol>
-<li>Open <b>app.netlify.com/drop</b>.</li>
-<li>Drag this whole folder onto the page. Netlify gives you a link such as <code>https://portfolio-rbg.netlify.app</code>.</li>
-<li>Claim the site with a free Netlify account so it stays online. In <b>Site configuration → Change site name</b> you can pick a short, memorable name.</li>
-<li>Updating later: drag the folder again onto <b>Deploys</b> in the same site.</li>
+<li>Create a free account at <b>github.com</b> and sign in.</li>
+<li>Click <b>+</b> (top right) &rarr; <b>New repository</b>. Name it, for example <code>portfolio-game</code>, choose <b>Public</b>, then <b>Create repository</b>.</li>
+<li>On the next page click <b>uploading an existing file</b>. Open the unzipped <code>portfolio-online</code> folder, select everything inside it (Ctrl+A), including the <code>vendor</code> folder, and drag it onto the page. Click <b>Commit changes</b>.</li>
+<li>Open <b>Settings</b> &rarr; <b>Pages</b>. Under <b>Build and deployment</b>, set Source to <b>Deploy from a branch</b>, Branch to <b>main</b> and folder <b>/ (root)</b>, then <b>Save</b>.</li>
+<li>Within about 10 minutes the page shows your link, for example <code>https://your-name.github.io/portfolio-game/</code>.</li>
 </ol>
-<p class="muted">Any static web host works the same way, for example GitHub Pages (upload the files to a repository and switch on Pages).</p>
+<p class="tip">Installing a new version: <span>open the repository &rarr; <b>Add file</b> &rarr; <b>Upload files</b> &rarr; drag in <code>index.html</code> and the whole <code>vendor</code> folder &rarr; <b>Commit changes</b>. GitHub replaces the old files and keeps your <code>config.js</code>. The new version is live within a few minutes; press Ctrl+F5 on the laptop to load it fresh.</span></p>
 </div>
 
 <h2><span class="n">4</span>Test run (5 minutes)</h2>
 <div class="card"><ol>
-<li>Open your link on the laptop → <b>Create a game</b>. The board appears with a QR code and a 4-letter code. The top bar shows <b>Live</b> once connected.</li>
-<li>Scan the QR code with your phone, enter a name, pick a group, join.</li>
+<li>Open your link on the laptop → <b>Create a game</b>. The board appears with a QR code and a 4-letter code.</li>
+<li>Scan the QR code with your phone, enter a name, pick a team, join.</li>
 <li>Press <b>Start game</b> on the laptop, tap <b>Roll dice</b> on the phone and watch the token move on the big screen.</li>
-<li>Test once on the training-room Wi-Fi. If office Wi-Fi filters the game, phones on mobile data and the laptop on a phone hotspot work well.</li>
+<li>Connect the laptop to the room speakers: the soft background music, dice and coin sounds play from the big screen.</li>
+<li>Test once on the training-room Wi-Fi. Mobile data on phones and a phone hotspot for the laptop work well as a backup.</li>
 </ol></div>
 
 <h2><span class="n">5</span>Session day</h2>
-<div class="card"><ul>
-<li>Laptop on the projector → open your link → <b>Create a game</b> → set groups, rounds and timer on the right → full screen with ⛶.</li>
-<li>Players scan, type a first name and pick their group (up to 6 groups, 3 to 6 players each). The first player in each group becomes its leader ★.</li>
-<li>Press <b>Start game</b>. Leaders roll, lock answers, roll for action spaces, pick clients when an outcome asks for it and confirm upgrades. Every member sees the cards and board on their phone and can suggest answers.</li>
-<li>Late joiners scan the small QR code in the side panel any time.</li>
+<div class="card"><ol>
+<li>Laptop on the projector → open your link → <b>Create a game</b> → press <b>Settings</b> to choose teams, rounds, team assignment, leader rotation, timer and fees → full screen with ⛶.</li>
+<li>Players scan and type a first name.
+  <ul>
+  <li><b>Players pick their team:</b> each player taps a team colour.</li>
+  <li><b>Random, by the facilitator:</b> players wait in the pool; press <b>Shuffle teams</b> to place everyone into balanced teams. Shuffle again as often as you like before the start, and use <b>Teams</b> to move a player or choose a leader.</li>
+  </ul></li>
+<li>Press <b>Present the rules</b>. The rules run as slides on the big screen and every phone follows the slide on screen. Use the ← → keys or the Next button.</li>
+<li>Press <b>Start game</b>. The flashing banner and the glowing board frame show whose turn it is; that team's phones flash too.</li>
+<li>A new leader ★ takes over in every team at the start of each round, so every player leads an equal number of rounds. The leader rolls, locks answers, rolls for action spaces, picks clients for outcomes and confirms upgrades. Every member sees the cards and board on their phone and can suggest answers.</li>
+<li>Late joiners scan the code any time; tap the code in the top bar to show the QR again. With random teams, late joiners go straight into the smallest team.</li>
 <li>If the laptop browser refreshes, the game resumes where it was. To return later, open the link and press <b>Resume</b>.</li>
-</ul></div>
+<li>At the final whistle press <b>Download results (Excel)</b> for standings, portfolios, every answer given, players with rounds led, the answer key and the game log.</li>
+</ol></div>
 
 <h2><span class="n">6</span>Facilitator controls on the big screen</h2>
 <div class="card"><table>
 <tr><th>Control</th><th>Use it to</th></tr>
-<tr><td>Roll for Group X</td><td>Roll on a group's behalf when their leader's phone is busy</td></tr>
-<tr><td>Lock top vote</td><td>Lock the group's most suggested answer during a question</td></tr>
-<tr><td>Client buttons under an outcome</td><td>Pick the client for a group (NPA, upgrade, on hold, tier change)</td></tr>
-<tr><td>Manage groups</td><td>Hand the leader role to another player, rename groups, change the number of rounds</td></tr>
-<tr><td>Move play on</td><td>Pass the turn to the next group</td></tr>
-<tr><td>Finish game</td><td>Tap twice to close the game early and show the final podium</td></tr>
+<tr><td>Code chip</td><td>Show the join QR code and invite link</td></tr>
+<tr><td>Rules</td><td>Present the rules as slides; phones follow along</td></tr>
+<tr><td>Settings</td><td>Before the start: teams, rounds, team assignment, leader rotation, players per team, answer timer, answer choices, starting cash, Start bonus, visit fees and upgrade fees</td></tr>
+<tr><td>Shuffle teams</td><td>Before the start: place every player into a random, balanced team</td></tr>
+<tr><td>Teams</td><td>Before and during play: move a player to another team, choose who leads, rename teams, change the rounds or the leader rotation</td></tr>
+<tr><td>Next team</td><td>Pass play to the next team</td></tr>
+<tr><td>Finish</td><td>Tap twice to close the game early and show the podium</td></tr>
+<tr><td>Roll for / Lock top suggestion</td><td>Act for a team when the leader's phone is busy</td></tr>
+<tr><td>♫ Music and sound</td><td>Music, sound effects and volume (keyboard: M for music)</td></tr>
+<tr><td>☰ Activity</td><td>A running log of every move</td></tr>
+<tr><td>Focus</td><td>Board fills the screen with a slim scoreboard beside it (keyboard: F)</td></tr>
+<tr><td>− 100% +</td><td>Resize the board from 60% to 100% (keyboard: − and +)</td></tr>
+<tr><td>◐ and ⛶</td><td>Switch between dark and light stage; full screen</td></tr>
+<tr><td>Final screen</td><td>Download results (Excel), Answer key, Play again, Clear data</td></tr>
 </table></div>
 
 <h2><span class="n">7</span>How the rules run online</h2>
 <div class="card"><ul>
-<li><b>Open client:</b> the business problem appears on every screen with 4 product choices (or all 14 products, a setting). Members suggest, the leader locks. A right answer wins the client at Affluent. Otherwise the client stays open and the right product and its reason appear for everyone.</li>
-<li><b>Fees:</b> collected automatically from every client a group holds that its token passes or lands on. ₹100 bonus on passing or landing on Start.</li>
-<li><b>Upgrades:</b> once a client's collected fees reach ₹300 it is ready for Wealth, at ₹500 for Private. The leader confirms with <b>Upgrade</b> on the phone (free by default; an upgrade fee is a lobby setting). Free upgrades still waiting at the final whistle apply automatically.</li>
-<li><b>RBI:</b> odd roll adds ₹50 to each of the group's fees, even roll takes ₹50 off, until the group next passes Start.</li>
+<li><b>Board:</b> every client tile shows its Total Relationship Value (TRV). When a team wins a client, the tile takes that team's colour, with a label showing the team letter, the current TRV and tier stars. The label updates with each upgrade.</li>
+<li><b>Open client:</b> the business problem appears on every screen with 4 product choices (or all 14 products, a setting). Members suggest, the leader locks. A right answer wins the client at Affluent and reveals the right product. Any other answer keeps the client open and the right product stays sealed, so the next team to land there gets a fresh chance. The full answer key opens at the end.</li>
+<li><b>Fees:</b> collected automatically from every client a team holds when its token passes or lands on it. ₹100 bonus on passing or landing on Start.</li>
+<li><b>Visit fee:</b> landing on another team's client pays that team a flat fee by tier:
+  <div class="fee"><span style="background:#8A6A4A">Affluent ₹50</span><span style="background:#0F6E8C">Wealth ₹100</span><span style="background:#8F1D2C">Private ₹200</span></div>
+  Visit fees go to cash. A client on hold collects visit fees again once its team next passes Start.</li>
+<li><b>Upgrades:</b> once a client's own fees reach ₹300 it is ready for Wealth, at ₹500 for Private. The leader confirms with <b>Upgrade</b> on the phone (free by default; an upgrade fee is a setting). Free upgrades still waiting at the final whistle apply automatically.</li>
+<li><b>RBI:</b> an odd roll adds ₹50 to each of the team's fees, an even roll takes ₹50 off, until the team next passes Start.</li>
 <li><b>Jail:</b> pay ₹300 and sit out the next turn.</li>
-<li><b>Regulatory Inspection and Market Boom / Recession:</b> the leader rolls and the printed table applies. "Suspend one owned client" runs as: that client earns fees again once the group next passes Start.</li>
-<li><b>Winner:</b> highest Total Relationship Value of clients held, at their current tier. Cash covers fines and any upgrade fees.</li>
+<li><b>Regulatory Inspection and Market Boom / Recession:</b> the leader rolls and the printed table applies. "Suspend one owned client" runs as: that client earns fees again once the team next passes Start.</li>
+<li><b>Winner:</b> highest Total Relationship Value of clients held, at their current tier. Cash covers fines, visit fees and any upgrade fees.</li>
 </ul></div>
 
 <h2><span class="n">8</span>Capacity</h2>
-<div class="card"><p>The free Firebase plan allows 100 simultaneous connections. A full game of 6 groups × 6 players plus the host screen uses 37. Each game takes a few kilobytes; <b>Clear game data</b> on the results screen removes it.</p></div>
+<div class="card"><p>The free Firebase plan allows 100 simultaneous connections. A full game of 6 teams × 6 players plus the host screen uses 37. Each game takes a few kilobytes; <b>Clear data</b> on the final screen removes it.</p></div>
 </main></body>
 </html>
