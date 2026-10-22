@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Portfolio Setup Guide</title>
+<style>
+:root{--brand:#E2650F;--maroon:#8F1D2C;--ink:#231A14;--muted:#6E6159;--line:#EADBCF;--bg:#FBF5EF;--card:#fff;--good:#17714A;--goodbg:#E3F3EA}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Mulish,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:860px;margin:0 auto;padding:32px 16px 60px}
+h1{font-size:34px;margin:0 0 4px;letter-spacing:.06em}
+h1 span{color:var(--brand)} h1 b{color:var(--maroon)}
+.lead{color:var(--muted);font-size:18px;margin:0 0 24px}
+h2{font-size:21px;margin:30px 0 10px;display:flex;align-items:center;gap:10px}
+h2 .n{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:8px;background:var(--brand);color:#fff;font-size:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:10px 0}
+ol,ul{margin:6px 0;padding-left:22px} li{margin:5px 0}
+code,pre{font-family:ui-monospace,Consolas,monospace;font-size:14px}
+code{background:#FFF1E6;border-radius:5px;padding:1px 5px}
+pre{background:#2A211B;color:#FCEBDD;border-radius:10px;padding:14px;overflow:auto}
+.tip{background:var(--goodbg);color:var(--good);border-radius:10px;padding:10px 14px;font-weight:600}
+.tip span{color:var(--ink);font-weight:500}
+table{border-collapse:collapse;width:100%;font-size:15px}
+td,th{border-top:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+@media print{body{background:#fff}.card{break-inside:avoid}}
+</style>
+</head>
+<body><main>
+<h1><span>PORT</span><b>FOLIO</b> · Online setup</h1>
+<p class="lead">One-time setup, about 15 minutes. After this, every session is: open the link on the projector laptop, press <b>Create a game</b>, players scan the QR code.</p>
+
+<div class="card"><b>What's in this folder</b>
+<table>
+<tr><td><code>index.html</code></td><td>The game: host screen, player phones and demo</td></tr>
+<tr><td><code>config.js</code></td><td>Holds your database address (step 2)</td></tr>
+<tr><td><code>vendor/firebase-rtdb.js</code></td><td>The connection library the game uses to sync screens</td></tr>
+<tr><td><code>database.rules.json</code></td><td>Rules to paste into Firebase (step 1)</td></tr>
+</table></div>
+
+<h2><span class="n">1</span>Create the free database (Firebase)</h2>
+<div class="card"><ol>
+<li>Open <b>console.firebase.google.com</b> and sign in with a Google account.</li>
+<li><b>Create a project</b> → name it, for example <code>portfolio-game</code>. Google Analytics is optional; switch it off for a faster setup.</li>
+<li>In the left menu open <b>Build → Realtime Database</b> → <b>Create Database</b>.</li>
+<li>Location: <b>Singapore (asia-southeast1)</b>, the closest region to India. Choose <b>Start in locked mode</b> → <b>Enable</b>.</li>
+<li>Open the <b>Rules</b> tab, replace everything with the rules below, then press <b>Publish</b>.</li>
+</ol>
+<pre>{
+  "rules": {
+    "games": {
+      "$code": {
+        ".read": true,
+        ".write": true
+      }
+    }
+  }
+}</pre>
+<p class="muted">These rules open only the <code>games</code> area, which holds player first names and game moves. Everything else in the database stays closed.</p>
+</div>
+
+<h2><span class="n">2</span>Connect the game to the database</h2>
+<div class="card"><ol>
+<li>On the <b>Data</b> tab, copy the address at the top. It looks like<br><code>https://portfolio-game-default-rtdb.asia-southeast1.firebasedatabase.app</code></li>
+<li>Open <code>config.js</code> in Notepad and paste the address between the quotes:<br><code>window.PORTFOLIO_DB_URL = 'https://portfolio-game-default-rtdb.asia-southeast1.firebasedatabase.app';</code></li>
+<li>Save the file.</li>
+</ol>
+<p class="tip">Quick alternative: <span>leave <code>config.js</code> as it is and paste the address into the box on the host screen. The game remembers it on that laptop and adds it to the join QR code automatically. Filling in <code>config.js</code> keeps the QR code smaller and easier to scan from the back of the room.</span></p>
+</div>
+
+<h2><span class="n">3</span>Put the game online (Netlify, free)</h2>
+<div class="card"><ol>
+<li>Open <b>app.netlify.com/drop</b>.</li>
+<li>Drag this whole folder onto the page. Netlify gives you a link such as <code>https://portfolio-rbg.netlify.app</code>.</li>
+<li>Claim the site with a free Netlify account so it stays online. In <b>Site configuration → Change site name</b> you can pick a short, memorable name.</li>
+<li>Updating later: drag the folder again onto <b>Deploys</b> in the same site.</li>
+</ol>
+<p class="muted">Any static web host works the same way, for example GitHub Pages (upload the files to a repository and switch on Pages).</p>
+</div>
+
+<h2><span class="n">4</span>Test run (5 minutes)</h2>
+<div class="card"><ol>
+<li>Open your link on the laptop → <b>Create a game</b>. The board appears with a QR code and a 4-letter code. The top bar shows <b>Live</b> once connected.</li>
+<li>Scan the QR code with your phone, enter a name, pick a group, join.</li>
+<li>Press <b>Start game</b> on the laptop, tap <b>Roll dice</b> on the phone and watch the token move on the big screen.</li>
+<li>Test once on the training-room Wi-Fi. If office Wi-Fi filters the game, phones on mobile data and the laptop on a phone hotspot work well.</li>
+</ol></div>
+
+<h2><span class="n">5</span>Session day</h2>
+<div class="card"><ul>
+<li>Laptop on the projector → open your link → <b>Create a game</b> → set groups, rounds and timer on the right → full screen with ⛶.</li>
+<li>Players scan, type a first name and pick their group (up to 6 groups, 3 to 6 players each). The first player in each group becomes its leader ★.</li>
+<li>Press <b>Start game</b>. Leaders roll, lock answers, roll for action spaces, pick clients when an outcome asks for it and confirm upgrades. Every member sees the cards and board on their phone and can suggest answers.</li>
+<li>Late joiners scan the small QR code in the side panel any time.</li>
+<li>If the laptop browser refreshes, the game resumes where it was. To return later, open the link and press <b>Resume</b>.</li>
+</ul></div>
+
+<h2><span class="n">6</span>Facilitator controls on the big screen</h2>
+<div class="card"><table>
+<tr><th>Control</th><th>Use it to</th></tr>
+<tr><td>Roll for Group X</td><td>Roll on a group's behalf when their leader's phone is busy</td></tr>
+<tr><td>Lock top vote</td><td>Lock the group's most suggested answer during a question</td></tr>
+<tr><td>Client buttons under an outcome</td><td>Pick the client for a group (NPA, upgrade, on hold, tier change)</td></tr>
+<tr><td>Manage groups</td><td>Hand the leader role to another player, rename groups, change the number of rounds</td></tr>
+<tr><td>Move play on</td><td>Pass the turn to the next group</td></tr>
+<tr><td>Finish game</td><td>Tap twice to close the game early and show the final podium</td></tr>
+</table></div>
+
+<h2><span class="n">7</span>How the rules run online</h2>
+<div class="card"><ul>
+<li><b>Open client:</b> the business problem appears on every screen with 4 product choices (or all 14 products, a setting). Members suggest, the leader locks. A right answer wins the client at Affluent. Otherwise the client stays open and the right product and its reason appear for everyone.</li>
+<li><b>Fees:</b> collected automatically from every client a group holds that its token passes or lands on. ₹100 bonus on passing or landing on Start.</li>
+<li><b>Upgrades:</b> once a client's collected fees reach ₹300 it is ready for Wealth, at ₹500 for Private. The leader confirms with <b>Upgrade</b> on the phone (free by default; an upgrade fee is a lobby setting). Free upgrades still waiting at the final whistle apply automatically.</li>
+<li><b>RBI:</b> odd roll adds ₹50 to each of the group's fees, even roll takes ₹50 off, until the group next passes Start.</li>
+<li><b>Jail:</b> pay ₹300 and sit out the next turn.</li>
+<li><b>Regulatory Inspection and Market Boom / Recession:</b> the leader rolls and the printed table applies. "Suspend one owned client" runs as: that client earns fees again once the group next passes Start.</li>
+<li><b>Winner:</b> highest Total Relationship Value of clients held, at their current tier. Cash covers fines and any upgrade fees.</li>
+</ul></div>
+
+<h2><span class="n">8</span>Capacity</h2>
+<div class="card"><p>The free Firebase plan allows 100 simultaneous connections. A full game of 6 groups × 6 players plus the host screen uses 37. Each game takes a few kilobytes; <b>Clear game data</b> on the results screen removes it.</p></div>
+</main></body>
+</html>
